@@ -82,7 +82,7 @@ From exercise directions added:
 #endif
 ```
 
-## 4. build Configuration
+## build Configuration
 
 The project was configured with:
 - Platform: Android.
@@ -179,7 +179,7 @@ Siguiendo las instrucciones de la práctica, se añadió:
 #endif
 ```
 
-## 4. configuración de compilación
+## configuración de compilación
 
 El proyecto se configuró con:
 - Plataforma: Android.
