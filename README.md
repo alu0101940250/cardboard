@@ -132,5 +132,72 @@ Controla el movimiento del jugador mediante la mirada.
 - `Ray ray = new Ray(camera.position, camera.forward);`  
   Crea un rayo que parte de la cámara VR y apunta en la dirección hacia la que mira el jugador.
 - Utiliza `Physics.Raycast()` para comprobar si el rayo alcanza el suelo.
-- `if(hit.collider.GetComponent
+- `if(hit.collider.GetComponent<Terrain>() != null){`  
+  Comprueba si el objeto detectado contiene un componente Unity Terrain (es decir, si es el terreno).
+- `Vector3 moveDir = camera.forward;`  
+  Calcula la dirección horizontal del movimiento a partir de la dirección frontal de la cámara.
+- Elimina el componente vertical y normaliza la dirección para mantener una velocidad de movimiento constante.
+- Actualiza la posición del objeto XR del jugador.
 
+El jugador se mueve mientras mira al terreno y se detiene cuando el rayo deja de detectarlo.
+
+### movement.cs
+
+Controla el comportamiento de los objetos coleccionables.
+
+- `player = Camera.main.transform;`  
+  Guarda una referencia a la cámara del jugador.
+- `float distance = Vector3.Distance(transform.position, player.position);`  
+  Detecta cuándo el jugador se acerca a un objeto coleccionable (calcula la distancia entre ambos).
+- Destruye el objeto coleccionable cuando está suficientemente cerca.
+- Utiliza `OnPointerEnter()` y `OnPointerExit()` para proporcionar información sobre las interacciones mediante la mirada.
+- Método `AttractToPlayer()`: activa el movimiento del objeto coleccionable hacia el jugador.
+- `Vector3.MoveTowards()`: mueve el objeto coleccionable hacia la cámara del jugador.
+
+### retrieve.cs
+
+Controla el objeto Retriever.
+
+- `OnPointerEnter()`: se llama cuando el jugador mira directamente al Retriever.
+- `movement[] allCollectibles = FindObjectsOfType<movement>();`  
+  Utiliza `FindObjectsOfType<movement>()` para encontrar todos los objetos activos que tienen asociado el script de movimiento de los coleccionables.
+- Recorre los objetos encontrados mediante un bucle `foreach`.
+- Llama a `AttractToPlayer()` en cada objeto coleccionable para hacer que se mueva hacia el jugador.
+- Implementa `OnPointerExit()` para recibir el evento que indica que el jugador ha dejado de mirar al objeto.
+
+Por tanto, el Retriever permite al jugador atraer todos los objetos coleccionables restantes simplemente mirándolo.
+
+### CardboardStartup.cs
+
+Inicializa la funcionalidad Google Cardboard XR.
+
+Siguiendo las instrucciones de la práctica, se añadió:
+
+```csharp
+#if !UNITY_EDITOR
+    Api.UpdateScreenParams();
+#endif
+```
+
+## 4. configuración de compilación
+
+El proyecto se configuró con:
+- Plataforma: Android.
+- XR Plugin: Google Cardboard.
+- Backend de scripting: IL2CPP.
+- Arquitectura de destino: ARM64.
+- API gráfica: OpenGLES3.
+- Gestión de entradas activa: Input System Package (New).
+
+La máscara de capas de interacción del Cardboard Reticle Pointer está configurada para detectar la capa `Interactive`.
+
+## scripts
+
+### playerMovement.cs
+
+Controla el movimiento del jugador mediante la mirada.
+
+- `Ray ray = new Ray(camera.position, camera.forward);`  
+  Crea un rayo que parte de la cámara VR y apunta en la dirección hacia la que mira el jugador.
+- Utiliza `Physics.Raycast()` para comprobar si el rayo alcanza el suelo.
+- `if(hit.collider.GetComponent
